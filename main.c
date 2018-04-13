@@ -1,4 +1,4 @@
-#include <stdio.h>        // Проверь коллизию и сделай чтение с файлов
+#include <stdio.h>        // Проверь коллизию и сделай чтение с файлов + добавь хэш функции
 #include <string.h>
 #include <stdlib.h>
 #include "hashtab.h"
