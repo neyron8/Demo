@@ -1,6 +1,8 @@
 #include "command.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include "coder.h"
 
 int encode_file(const char *in_file_name, const char *out_file_name) {
 
@@ -17,24 +19,27 @@ int encode_file(const char *in_file_name, const char *out_file_name) {
         return -1;
     }
     
-    char ch;
+
+    while(1) 
+	{
+		char sim;
 
 		do {
-			ch = getc (in);
+			sim = getc (in);
 
-			if (ch == EOF) {
+			if (sim == EOF) {
 				return -2;
 			}
-		} while (ch == ' ' || ch == '\n');
+		} while (sim == ' ' || sim == '\n');
 
 		if (fseek (in, -1, SEEK_CUR)) {
 			return -1;
 		}
 
-		char code [8];
+		char cod [8];
 		uint32_t num;
 
-		if (fgets (code, 8, in) == NULL) {
+		if (fgets (cod, 8, in) == NULL) {
 			if (feof (in)) {
 				return -2;
 			}
@@ -44,31 +49,57 @@ int encode_file(const char *in_file_name, const char *out_file_name) {
 			}
 		}
 
-		num = strtol (code, NULL, 16);
+		num = strtol (cod, NULL, 16);
 
-		if (encode (num, code_units)) {
+		if (encode (num, code)) {
 			return -1;
 		}
+    	write_code_unit (out, code);
+	}
+			
+
+    fclose(in);
+    fclose(out);
+	return 0;
+}
+
+int decode_file(const char *in_file_name, const char *out_file_name) {
+
+    FILE *in;
+    FILE *out;
+
+    in = fopen ( in_file_name, "rb");
+    
+    out = fopen ( out_file_name, "wt");
+  
+
+    CodeUnits *code = calloc (sizeof (CodeUnits), 1);
+    if (code == NULL) {
+        printf ("Error of initialization\n" );
+        return -1;
+    }
 
     for (int a = 0;;) {
 		a = read_next_code_unit (in, code);
 		if (a == 0) {
-			if (write_code_unit (out, code)) {
-				printf(ERROR "OUTPUT ERROR \n" END);
-			}
+			uint32_t code_point = 0;
+
+			code_point = decode (code);
+
+			fprintf(out, "%x\n", code_point);
 		} else if (a == -1) {
-			printf(ERROR "ERROR\n" END);
 			break;
 		} else if (a == -2) {
-            printf(INFO "End of" CBOLD " %s " CINFO "reached\n" END,\
-                                                                in_file_name);
 			break;
 		}
-	}
+}
+    free (code);
 
     fclose(in);
-    fclose(out);
-
+	fclose(out);
 
     return 0;
 }
+
+    
+

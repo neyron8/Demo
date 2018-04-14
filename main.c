@@ -1,25 +1,19 @@
-#include <stdio.h>        // Проверь коллизию и сделай чтение с файлов + добавь хэш функции
-#include <string.h>
+#include "coder.h"
+#include "command.h"
 #include <stdlib.h>
-#include "hashtab.h"
+#include <string.h>
 
-#define HASH_MUL 31
-#define SIZE 10000
-
-int main() 
+int main(int argc, char *argv[])
 {
-	hash_table *man;
-	node *look;
-	man = hashtab_init (SIZE);
-	printf("dfdfd");
-	hashtab_add(man,"you",12);
-	hashtab_add(man,"yu",12);
-    hashtab_add(man,"youdfssdf",12);
-    hashtab_add(man,"you323",12);
-	look = hashtab_lookup(man,"yu");
-	printf("%s", look -> key);
-	hashtab_delete(man,"yu");
-	printf("%s", look -> key);
+
+	if (((strcmp (argv[1], "encode\0")) == 0)\
+			&& (strstr (argv[2], ".txt\0")) && (strstr (argv[3], ".bin\0"))) {
+		encode_file(argv[2], argv[3]);
+	} else if (((strcmp (argv[1], "decode\0")) == 0)\
+	 		&& (strstr (argv[2], ".bin\0")) && (strstr (argv[3], ".txt\0"))) {
+		decode_file(argv[2], argv[3]);
+	}
+	
 
 	return 0;
 }
