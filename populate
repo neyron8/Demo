@@ -1,0 +1,17 @@
+int populate_hash(node *table[], FILE *file)
+{
+    char word[50];
+    char c;
+
+    do {
+        c = fscanf(file, "%s", word);
+        // Важно: следует удалить символ перехода на следующую строку
+        size_t ln = strlen(word) - 1;
+        if (word[ln] == '\n')
+            word[ln] = '\0';
+
+        insert(table, word);
+    } while (c != EOF);
+
+    return 1;
+}
