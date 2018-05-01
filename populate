@@ -175,7 +175,7 @@ int process(char *str) {
   // scat(syg );
   // printf("%d\n", slen(*po));
   // printf("%d\n", slen(*(po + 1)));
-  // printf("%s\n", syg1);
+   printf("%s\n", syg1);
   return 0;
 }
 
