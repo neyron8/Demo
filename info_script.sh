@@ -37,4 +37,4 @@ swapon | grep '/dev/sda2' | awk '{print $3}'
 echo -n 'Сетевые интерфейсы - '
 echo -ne '\n\tКоличество сетевых интерфейсов - '
 ifconfig -s | tail -n3 |  wc -l
-echo 
+echo -e "№\t | Имя сетевого интерфейса\t|\t\t"
